@@ -1,0 +1,7 @@
+This Model will be simple and establish some of the basic objects needed for modeling the genome.
+
+Admittedly I am starting from skratch.  Why?  Because that is what my brain needs to process this whole problem!
+
+R is not equipped for proper Object based programming.  I shall not use it that way then.... Lets think of a different way to program this then.  Or just use python...
+
+

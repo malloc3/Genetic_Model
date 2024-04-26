@@ -1,0 +1,82 @@
+---
+title: "Genetic_Model_With_Mutation_and_CCNV"
+output: html_document
+date: "2024-04-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+For the first model we will not include CCNV!
+
+Lets assume the fungi does not sexually reproduce at all.
+$$
+R = number\ of\ mutants \\
+u = mutation\ rate \\
+N = population\ size \\
+n = growth\ rate
+$$
+R = number of mutants
+u = mutation rate
+
+N = population Size
+n = growth Rate
+
+The system would then be governed by these equations
+$$
+N_{t+1} = N_{t}(e^{n}) \\
+R_{t+1} = N_{t+1}(u + \frac{R_{t}}{N_{t}} * \frac{1}{ln(\frac{N_{t+1}}{N_t})})
+$$
+Okay lets code this up and see how many mutants we have in the end
+
+Set up the functions
+```{r}
+#The function calculating the total populations size based on current population
+#size, growth rate, and number of time steps T.  Time step is assumed to be 1
+# unless otherwise stated
+nt = function(N, n, t = 1){return(N*exp(n*t))}
+
+# Finds the new number of mutants!
+# N1 = current population
+# N2 = population at step 2
+# u = mutation rate
+# R1 = Current number of mutants
+rt = function(N1, N2, u, R1){return(N2*(u + R1/N1*1/(log(N2/N1))))}
+```
+
+
+Now lets actually run the experiment
+```{r}
+u = .001
+n = 3
+N0 = 1
+R0 = 0
+number_of_generations = 100
+
+N_list = c(N0)
+R_list = c(R0)
+generations = c(1:number_of_generations)
+
+for(i in 2:number_of_generations){
+  Ni = N_list[i-1]
+  Ri = R_list[i-1]
+  
+  N = nt(Ni, n)
+  R = rt(Ni, N, u, Ri)
+  
+  N_list[i] = N
+  R_list[i] = R
+}
+
+plot(generations, log(R_list))
+plot(generations, log(N_list))
+plot(generations, R_list/N_list)
+
+```
+
+
+
+
+

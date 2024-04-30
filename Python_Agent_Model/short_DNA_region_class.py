@@ -10,6 +10,11 @@ class short_DNA_region:
     def __init__(self, sequence):
         self.sequence = sequence
         self.length = len(sequence)
+    
+    #Returns a string of the letters of the sequence
+    def sequence_str(self):
+        return [x.bp for x in self.sequence]
+
 
 
 

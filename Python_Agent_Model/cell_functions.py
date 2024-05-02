@@ -7,6 +7,7 @@ from sister_chromatids import *
 import dna_functions
 import sister_chromosome_functions
 import uuid
+import numpy as np
 
 #Creates a basic cell from input parameters
 #
@@ -64,9 +65,21 @@ def multiple_duplicates_with_UUID(parent_cel, number_of_duplicates):
 
 # This manages the cell mutations protocols.  THe functions of this are yet undefined.
 #
-def mutate_cell(cel):
+# This mutates on a normal distribution.  The distribution dictates
+# how many point mutations will occur across the whole cell.
+#  These mutations will then RANDOMLY occur somehwere in the genome
+#
+# params[0] = mean
+# params[1] = standard deviation
+def point_mutate_cell_norm(cel, params):
+    number_of_mutations = round(np.random.normal(params[0], params[1]))
     return(cel)
 
-# THis helps mutate many cells.   Unknown function at this time.
-def mutate_cells(cels):
-    return([mutate_cell(cel) for cel in cels])
+# THis helps mutate many cells.
+# The mutation of the cell is based on the normal distribution
+# parameterized by the given params
+#
+# params[0] = mean
+# params[1] = standard deviation
+def point_mutate_cells_norm(cels, params):
+    return([point_mutate_cell_norm(cel, params) for cel in cels])

@@ -10,7 +10,6 @@ from short_DNA_region_class import *
 class chromosome:
     def __init__(self, genes):
         self.genes = genes
-        self.num_genes = len(genes)
         self.length = sum([g.length for g in genes])
 
     # Returns the full chromosome sequence as a string
@@ -36,3 +35,6 @@ class chromosome:
             total_sequence += g.sequence
         return(total_sequence)
     
+    #Returns the number of genes in the chromosome.  THis shouldnt change
+    def num_genes(self):
+        return(len(self.genes))

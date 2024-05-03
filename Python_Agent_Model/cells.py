@@ -21,6 +21,7 @@ class Cell:
         return(sequences)
 
     # Returns the sequence strings of all the chromosomes and sister chromatids
+    # [sisterchromatid[chromosome[string_sequence]], ]
     def sequence_str(self):
         sequences = []
         for sis_chromo in self.sister_chromatids:

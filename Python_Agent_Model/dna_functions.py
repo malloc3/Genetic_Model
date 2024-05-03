@@ -5,12 +5,19 @@ from bp_class import *
 from short_DNA_region_class import *
 from chromosome_class import *
 
+# The shortest we will allow a gene to be.  This is moderatly arbitrary
+shortest_possible_gene = 3
+
+
+# Gives the possible options for Base Pairs
+def bp_options():
+    return(["a", "c", "g", "t"])
 
 # This generates a random choice for a base pair
 # Return
 #   Bp = Bp basepair class.   A specific basepair
 def random_bp():
-    bp = random.choice(["a", "c", "g", "t"])
+    bp = random.choice(bp_options())
     return(Bp(bp))
 
 
@@ -75,10 +82,12 @@ def make_baisc_chromosome(chromo_length,
         #  TODO this is kinda an issue since all the genes at the ends will be
         #       short...  Which is not realistic
         if bp_count + gene_length > chromo_length:
-            gene_length = chromo_length - bp_count   
-            
-        bp_count += gene_length #Iterate
-        genes.append(create_basic_gene(gene_length)) #append a new gene
+            gene_length = chromo_length - bp_count  
+        bp_count += gene_length #Iterate 
+
+        # Essentially we don't want genes that are absurdly short
+        if gene_length > shortest_possible_gene:
+            genes.append(create_basic_gene(gene_length)) #append a new gene
     return(chromosome(genes))
 
 
@@ -94,3 +103,21 @@ def create_basic_gene(length):
     sequence = [random_bp() for _ in range(length)]
     return(gene(sequence))
 
+
+# Randomly recombinates a genes from these chromosomes
+#  Essentially choose a gene at random and then switches them!
+#
+# Input
+#   chromo1 = Class Chromosome
+#   chromo2 = Class Chromosome
+def random_recombination(chromo1, chromo2):
+    if len(chromo1.genes) != len(chromo2.genes):
+        raise ValueError("Chromosomes that should be the same number of genes are not :(")
+    else:
+        #gets the genes from random location in chromosome
+        gene_location = random.randint(0, len(chromo2.genes)-1)
+        gene_1 = chromo1.genes[gene_location]
+        gene_2 = chromo2.genes[gene_location]
+
+        chromo1.genes[gene_location] = gene_2
+        chromo2.genes[gene_location] = gene_1

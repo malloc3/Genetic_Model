@@ -44,4 +44,4 @@ class sister_chromosomes:
             self.chromosomes.remove(chromosome_to_remove)
             self.num_chromosomes = len(self.chromosomes)
         else:
-            Warning("Tried to remove a chromosome to less than 1" + id(self))
+            Warning("Tried to remove a chromosome to less than 1" + str(id(self)))

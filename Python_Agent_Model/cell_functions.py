@@ -8,6 +8,7 @@ import dna_functions
 import sister_chromosome_functions
 import uuid
 import numpy as np
+import warnings
 
 #Creates a basic cell from input parameters
 #
@@ -63,7 +64,10 @@ def multiple_duplicates_with_UUID(parent_cel, number_of_duplicates):
     return(daughter_cells)
 
 
-# This manages the cell mutations protocols.  THe functions of this are yet undefined.
+
+#TODO include some factor that accounts for the size of the genome.  Larger
+# Genomes should have higher mutation rates.
+#
 #
 # This mutates on a normal distribution.  The distribution dictates
 # how many point mutations will occur across the whole cell.
@@ -73,6 +77,19 @@ def multiple_duplicates_with_UUID(parent_cel, number_of_duplicates):
 # params[1] = standard deviation
 def point_mutate_cell_norm(cel, params):
     number_of_mutations = round(np.random.normal(params[0], params[1]))
+    for i in range(number_of_mutations):
+        try:
+            # Gets a random chromatid from the chromatids in the cell
+            ran_chroma = random.choice(cel.sister_chromatids)
+
+            # Gets a random chromosome from the chromatid
+            ran_chromo = random.choice(ran_chroma.chromosomes)
+            ran_gene = random.choice(ran_chromo.genes) # Gets a random gene from chromosome
+            ran_bp = random.choice(ran_gene.sequence) #Gets a random BP to mutate
+        except IndexError:
+            print(ran_chromo.length)
+            raise Exception("Genes or Sequences have length of Zero.  This cannot be allowed to happen")
+        ran_bp.bp = random.choice(dna_functions.bp_options()) #Replaces with a random BP
     return(cel)
 
 # THis helps mutate many cells.
@@ -83,3 +100,85 @@ def point_mutate_cell_norm(cel, params):
 # params[1] = standard deviation
 def point_mutate_cells_norm(cels, params):
     return([point_mutate_cell_norm(cel, params) for cel in cels])
+
+
+
+#TODO Create the function that manages recombination
+# This has no knowledge of how many chromosomes a chromatid has.
+#  It will chose chromatids at random.  #TODO THIS PROBABLY NEEDS TO BE DIFFERENT
+#
+# Input
+#   cels = List of all the cells in a generation
+#   params = Dictionary
+#   {
+#       recombination_probability: [3, .001] # The normal curve about mean that variation will happen
+#   }
+def recombinate_cells_norm(cels, params):
+    for cel in cels:
+        recombination_probability = params["recombination_probability"]
+
+        number_of_recombination_events = abs(round(np.random.normal(recombination_probability[0], recombination_probability[1])))
+        for i in range(number_of_recombination_events):
+            recombinate_random_chromatid(cel)
+
+
+# Randome recombines a two chromsomes in a random chromatid
+#
+# Input
+#   cel = cell class
+def recombinate_random_chromatid(cel):
+    random_sis_chroma = random.choice(cel.sister_chromatids)
+    sister_chromosome_functions.random_recombination(random_sis_chroma)
+
+
+# TODO
+#  Need to think on this.   I have the normal about zero.  Such that neg
+# numbers are equally as likely as positive numbers.  Negs are considered teh same
+#  as positive (e.g. abs(nrom))   THis makes a change twice as likely....
+#
+#
+# This will decide if a cell will or will not unergo CCNV
+# If it does happen it will happen to a random chromosome.
+#Input
+#   cels = List of all the cells in a generation
+#   params = Dictionary
+#   {
+#       variation_probability: [0, .001] # The normal curve about mean that variation will happen
+#       probability_of_pos: 0.5 #likelyhood any change will be positive (inverse for neg)
+#
+#   }
+def ccnv_cels_norm(cels, params):
+    for cel in cels:
+        # Get param values
+        variation_probability = params["variation_probability"]
+        probability_of_pos = params["probability_of_pos"]
+    
+        #Check that param values are acceptable
+        if not (0 <= probability_of_pos <= 1):
+            raise ValueError("Probability of Positive must be between 0 and 1.")
+
+
+
+        # Gets the number of times that a chromosome will change in a cell
+        # This should be a rare event
+        # Normal disdribution around 0 should make UP and DOWN equally likely
+        number_of_chromosome_changes = abs(round(np.random.normal(variation_probability[0], variation_probability[1])))
+        
+        # We will randomly choose a sister chromatid to vary up or down x number of times
+        for i in range(number_of_chromosome_changes):
+            sis_chroma = random.choice(cel.sister_chromatids)
+
+            # Doesnt allow it to go below 1 chromosome.  Does increase the chance that a
+            # chromosome that is at 1 ill go up compaired to other chromosome counts #TODO
+            if len(sis_chroma.chromosomes) <= 1:
+                result = 1
+            else:
+                outcomes = [1, -1]
+                weights = [probability_of_pos, 1 - probability_of_pos] 
+                result = random.choices(outcomes, weights=weights, k=1)[0]
+            if result == 1: #positive change
+                sister_chromosome_functions.add_random_chromosome(sis_chroma)
+            elif result == -1: #Negative change
+                sister_chromosome_functions.remove_random_chromosome(sis_chroma)
+            else: #THIS SHOULD NEVER HAPPEN BUT GOTTA CATCH THEM ALL
+                raise ValueError("The results of pos v neg are inconclusive?")

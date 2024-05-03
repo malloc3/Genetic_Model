@@ -5,7 +5,7 @@ from short_DNA_region_class import *
 from chromosome_class import *
 from sister_chromatids import *
 import dna_functions
-
+import warnings
 
 # Generates a chromosome and creates a sister chromatid set of "count" repeats.
 # All chromosomes are identical
@@ -56,8 +56,11 @@ def add_random_chromosome(sis_chromo):
 
 # Removes a random chromosome fromthe sister chromosome
 def remove_random_chromosome(sis_chromo):
-    chromo_to_remove = random.choice(sis_chromo.chromosomes)
-    sis_chromo.remove_chromosome(chromo_to_remove)
+    if len(sis_chromo.chromosomes) <= 1:
+        warnings.warn("cannont make chromosome go below 1")
+    else:
+        chromo_to_remove = random.choice(sis_chromo.chromosomes)
+        sis_chromo.remove_chromosome(chromo_to_remove)
 
 # THis duplicates a sister chromatids with it's chromosomes etc but makes a new exact copy
 # Input
@@ -69,3 +72,26 @@ def duplicate_sister_chromatid(sis_chromo):
     chromos = [dna_functions.duplicate_chromosome(chromo) for chromo in sis_chromo.chromosomes]
     dup_sister_chromo = sister_chromosomes(chromos)
     return(dup_sister_chromo)
+
+
+# Chooses two random chromosomes to randomly do a recombination event
+#
+# Input
+#   sis_chromatids = Class sister_chromatids
+def random_recombination(sis_chromatid):
+    
+    # Must make a shallow copy of the list.  So we can modify the list locally 
+    # but keep the sam objects inside the list!  Important!
+    possible_chromosomes = list(sis_chromatid.chromosomes)
+
+    
+    if len(possible_chromosomes) <= 1: #there is only 1 chromosome
+        warnings.warn("recombination_even_not_possible")
+    else: # there are more than 2 chromosomes
+        chromo_1 = random.choice(possible_chromosomes) #Random choice chromosome
+        
+        #Randomly choose chromosome that is NOT chromo 1
+        possible_chromosomes.remove(chromo_1)
+        chromo_2  = random.choice(possible_chromosomes)
+
+        dna_functions.random_recombination(chromo_1, chromo_2)

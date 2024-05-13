@@ -17,14 +17,31 @@ std_headers = ['Strain_ID', 'Parent_ID', 'Generation', "number_of_chromatids", #
 # This module is to handle saving the cells in a logical and helpful way
 #  Thie should probably save stuff to a CSV or similar.
 
+
+# THis writes a generation to a given dataframe
+#
+#Input
+#   df = Pandas DF that stuff will be written to
+#   generation = List of the cells in the gerenation
+def write_generation_to_df(df, generation):
+    generation_data = []
+    for cel in generation:
+        generation_data += get_cell_data_to_write(cel)
+    temp_df = pd.DataFrame(generation_data, columns=std_headers)
+    return(pd.concat([df, temp_df], ignore_index=True))
+
+
 #This saves the current generation to a CSV designated in the FILE LOCATION
 #
+# Input
+#    generation = List of class Cell to be written
+#   file_name = String the file name of the file where the data will be written.
 def write_generation(generation, file_name):
     all_data = []
-    for cel in generation:
+    for cel in generation:      # This part take a LONG time.   Not sure how to optimize that part.
         all_data += get_cell_data_to_write(cel)
     temp_df = pd.DataFrame(all_data, columns=std_headers)
-    temp_df.to_csv(file_name, mode='a', header=False, index=False)
+    temp_df.to_csv(file_name, mode='a', header=False, index=False)  #This also takes some time.  So it may be good to offload this once per run
 
 
 # Pulls relevant data from the cell and reports it as a list of lists
@@ -39,7 +56,7 @@ def get_cell_data_to_write(cel):
     # Now we gotta get chromatid information
     for sis_chroma in cel.sister_chromatids:
         chromatid_number = sis_chroma.chromatid_number
-        cc_number = sis_chroma.num_chromosomes
+        cc_number = len(sis_chroma.chromosomes)
         chromatid_id = sis_chroma.id
         chromatid_parent = sis_chroma.parent
 
@@ -66,36 +83,13 @@ def get_cell_data_to_write(cel):
 
 
 
-
-
-
-
-
-
-    cell_chromosome_sequences = []
-    sis_chroma_number = 0
-    for sis_chroma in cel.sequence_str():
-        sis_chroma_number += 1 #For iterator
-        CC_number = len(sis_chroma)
-        for chromo_seq in sis_chroma:
-            cell_chromosome_sequences.append([cel.id, cel.parent, cel.generation, sis_chroma_number, CC_number, chromo_seq])
-    return(cell_chromosome_sequences)
-
-
-
 # This opens an existig csv or creates and formates a new one
 # Then writes the each cell in the generation to the csv
 def write_generation_to_csv(generation, filename, metadata = None):
     #makes the file if it doesnt exist
     if not os.path.exists(filename):
         write_new_file_with_metadata(filename, metadata)
-
-    # This part is modified temporarily to test a theory on how to speed up the writing process (05/10/24)
     write_generation(generation, filename)
-    #Writes actual files
-    #with open(filename, 'a', newline='') as csvfile:
-    #    writer = csv.writer(csvfile)
-    #    write_generation(generation, writer)
 
 # This opens an existig csv or creates and formates a new one
 # Then writes the cell information to the csv

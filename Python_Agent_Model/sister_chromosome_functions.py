@@ -27,7 +27,7 @@ def generate_basic_chromatid(chromo_length,
                             average_gene_length, 
                             chromo_count,
                             std_dev_percent_of_ave_gene = 0.4,
-                            chromatid_number = uuid.uuid1(),
+                            chromatid_number = None,
                             sis_chroma_id = uuid.uuid1()):
     basic_chromo = dna_functions.make_baisc_chromosome(chromo_length, average_gene_length, 
                                                        std_dev_percent_of_ave_gene)
@@ -45,7 +45,7 @@ def generate_basic_chromatid(chromo_length,
 #   sister_chromo = CLass Sister_Chromatids 
 def basic_sister_chromatids_from_chromo(chromo, 
                                         count,
-                                        chromatid_number = uuid.uuid1(),
+                                        chromatid_number = None,
                                         sis_chroma_id = uuid.uuid1()):
     chromosomes = [chromo]
     for i in range(count-1):

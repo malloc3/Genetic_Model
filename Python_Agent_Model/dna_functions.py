@@ -4,21 +4,19 @@ import random
 from bp_class import *
 from short_DNA_region_class import *
 from chromosome_class import *
+from enum import Enum
+import uuid
 
 # The shortest we will allow a gene to be.  This is moderatly arbitrary
 shortest_possible_gene = 3
 
-
-# Gives the possible options for Base Pairs
-def bp_options():
-    return(["a", "c", "g", "t"])
 
 # This generates a random choice for a base pair
 # Return
 #   Bp = Bp basepair class.   A specific basepair
 def random_bp():
     bp = random.choice(bp_options())
-    return(Bp(bp))
+    return(Bp[bp])
 
 
 # THis duplicates a chromosome with it's genes etc but makes a new exact copy
@@ -29,7 +27,7 @@ def random_bp():
 #   dup_chromo = Chromosome a chromosome that is an exact copy of the input chromosome
 def duplicate_chromosome(chromo):
     new_genes = [duplicate_gene(g) for g in chromo.genes]
-    dup_chromo = chromosome(new_genes)
+    dup_chromo = chromosome(new_genes, id = uuid.uuid1(), parent = chromo.id)
     return(dup_chromo)
 
 # Duplicates a gene.  Makes an exact copy of a gen but as a new object
@@ -38,10 +36,10 @@ def duplicate_chromosome(chromo):
 #   gene = Gene class the gene to duplicate
 # Output
 #   dup_gene = the new duplicated gene
-def duplicate_gene(gen):
+def duplicate_gene(gen, id = uuid.uuid1()):
     old_bp = gen.sequence
     new_bp = [duplicate_bp(b) for b in gen.sequence]
-    return(gene(new_bp))
+    return(gene(new_bp, id, parent = gen.id, position = gen.position))
 
 
 # Duplicates a base pair.   Makes an exact copy of the bp
@@ -51,7 +49,7 @@ def duplicate_gene(gen):
 # OUtput
 #  dup_bp = Class Base Pair.  The new base pair
 def duplicate_bp(b):
-    return(Bp(b.bp))
+    return(Bp[b.name])
 
 
 
@@ -69,10 +67,13 @@ def duplicate_bp(b):
 #   chromo = The chromosome it Generates!
 def make_baisc_chromosome(chromo_length, 
                           average_gene_length, 
-                          std_dev_percent_of_ave_gene = 0.4):
+                          std_dev_percent_of_ave_gene = 0.4,
+                          chromo_id = uuid.uuid1(),
+                          chromo_parent = None):
     std_dev = average_gene_length * std_dev_percent_of_ave_gene
     bp_count = 0
     genes = []
+    gene_position = 0
     while bp_count < chromo_length:
         #Get a random length for the gene 
         gene_length = round(np.random.normal(average_gene_length, std_dev))
@@ -87,8 +88,9 @@ def make_baisc_chromosome(chromo_length,
 
         # Essentially we don't want genes that are absurdly short
         if gene_length > shortest_possible_gene:
-            genes.append(create_basic_gene(gene_length)) #append a new gene
-    return(chromosome(genes))
+            genes.append(create_basic_gene(gene_length, position = gene_position)) #append a new gene
+        gene_position += 1
+    return(chromosome(genes, chromo_id, chromo_parent))
 
 
 
@@ -99,9 +101,9 @@ def make_baisc_chromosome(chromo_length,
 #
 # Output
 #   gene = The gene that was generated!
-def create_basic_gene(length):
+def create_basic_gene(length, id = uuid.uuid1(), parent = None, position = None):
     sequence = [random_bp() for _ in range(length)]
-    return(gene(sequence))
+    return(gene(sequence, id, parent, position))
 
 
 # Randomly recombinates a genes from these chromosomes
@@ -116,8 +118,24 @@ def random_recombination(chromo1, chromo2):
     else:
         #gets the genes from random location in chromosome
         gene_location = random.randint(0, len(chromo2.genes)-1)
-        gene_1 = chromo1.genes[gene_location]
-        gene_2 = chromo2.genes[gene_location]
+        
+        #Swaps the genes
+        swap_two_genes(chromo1, chromo2, gene_location, gene_location)
 
-        chromo1.genes[gene_location] = gene_2
-        chromo2.genes[gene_location] = gene_1
+        #Updates teh chromosomes with the id of the chromosome it swaped with
+        chromo1.add_recombination(chromo2.id)
+        chromo2.add_recombination(chromo1.id)
+
+
+# This swabs two genes between two chromosomes. And updates the genes to their new position idicies
+#
+# Chromo_1 = Class Chromosome 
+def swap_two_genes(chromo1, chromo2, gene_position_1, gene_position_2):
+    gene_location = random.randint(0, len(chromo2.genes)-1)
+    gene_1 = chromo1.genes[gene_position_1]
+    gene_2 = chromo2.genes[gene_position_2]
+    gene_1.position = gene_2.position
+    gene_2.position = gene_1.position
+
+    chromo1.genes[gene_position_1] = gene_2
+    chromo2.genes[gene_position_2] = gene_1

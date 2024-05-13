@@ -9,9 +9,11 @@ import dna_functions
 #
 # chromosomes = the list of chromosomes that it contains!   They should all be very similar.
 class sister_chromosomes:
-    def __init__(self, chromosomes):
+    def __init__(self, chromosomes, chromatid_number, id, parent = None):
         self.chromosomes = chromosomes
-        self.num_chromosomes = len(chromosomes)
+        self.chromatid_number = chromatid_number
+        self.id = id
+        self.parent = parent
 
 
     # Returns the sequences of the sister chromatids as nested list
@@ -40,8 +42,13 @@ class sister_chromosomes:
     #removes a specific chromosome
     # cchromosome_to_remove = the speciifc chromosome to be removed
     def remove_chromosome(self, chromosome_to_remove):
-        if self.num_chromosomes > 1:
+        if len(self.chromosomes) > 1:
             self.chromosomes.remove(chromosome_to_remove)
             self.num_chromosomes = len(self.chromosomes)
         else:
             Warning("Tried to remove a chromosome to less than 1" + str(id(self)))
+    
+
+    #Reports the number of chromosomes
+    def num_chromosomes(self):
+        return(len(self.chromosomes))

@@ -6,6 +6,7 @@ from chromosome_class import *
 from sister_chromatids import *
 import dna_functions
 import warnings
+import uuid
 
 # Generates a chromosome and creates a sister chromatid set of "count" repeats.
 # All chromosomes are identical
@@ -25,10 +26,12 @@ import warnings
 def generate_basic_chromatid(chromo_length, 
                             average_gene_length, 
                             chromo_count,
-                            std_dev_percent_of_ave_gene = 0.4):
+                            std_dev_percent_of_ave_gene = 0.4,
+                            chromatid_number = uuid.uuid1(),
+                            sis_chroma_id = uuid.uuid1()):
     basic_chromo = dna_functions.make_baisc_chromosome(chromo_length, average_gene_length, 
                                                        std_dev_percent_of_ave_gene)
-    return(basic_sister_chromatids_from_chromo(basic_chromo, chromo_count))
+    return(basic_sister_chromatids_from_chromo(basic_chromo, chromo_count, chromatid_number, sis_chroma_id))
     
 
 # Creats a sister chromatid set of "count" repeats from a given chromosome
@@ -40,12 +43,15 @@ def generate_basic_chromatid(chromo_length,
 #
 # Output:
 #   sister_chromo = CLass Sister_Chromatids 
-def basic_sister_chromatids_from_chromo(chromo, count):
+def basic_sister_chromatids_from_chromo(chromo, 
+                                        count,
+                                        chromatid_number = uuid.uuid1(),
+                                        sis_chroma_id = uuid.uuid1()):
     chromosomes = [chromo]
     for i in range(count-1):
         chromosomes.append(dna_functions.duplicate_chromosome(chromo))
     
-    return(sister_chromosomes(chromosomes))
+    return(sister_chromosomes(chromosomes, chromatid_number, sis_chroma_id))
 
  
 # Adds a random chromosome from the list of chromosomes and updates list
@@ -70,7 +76,8 @@ def remove_random_chromosome(sis_chromo):
 #   dup_sister_chromo = Sister Chromosomes a suster chromosome that is an exact copy of the input sister chromosome
 def duplicate_sister_chromatid(sis_chromo):
     chromos = [dna_functions.duplicate_chromosome(chromo) for chromo in sis_chromo.chromosomes]
-    dup_sister_chromo = sister_chromosomes(chromos)
+    dup_sister_chromo = sister_chromosomes(chromos, chromatid_number = sis_chromo.chromatid_number,
+                                           id = uuid.uuid1(), parent = sis_chromo.id)
     return(dup_sister_chromo)
 
 

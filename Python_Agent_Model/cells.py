@@ -3,13 +3,12 @@ class Cell:
     # Id = a random ID for the cell
     # sister_chromatids = a list of the chromosomes it has!
     # parent = Id of the parent of this cell
-    def __init__(self, id, sister_chromatids, parent_ID, generation = 0):
+    def __init__(self, id, sister_chromatids, parent_ID, generation = None):
         if id == parent_ID:
             raise("Parent and Child cannot have the same ID")
         else:
             self.id = id
             self.sister_chromatids = sister_chromatids
-            self.number_chromatids = len(sister_chromatids)
             self.parent = parent_ID
             self.generation = generation
     
@@ -28,4 +27,6 @@ class Cell:
             sequences.append(sis_chromo.sequence_str())
         return(sequences)
 
-
+    # Returns the number of chromatids the cell has.
+    def number_chromatids(self):
+        return(len(self.sister_chromatids))

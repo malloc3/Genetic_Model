@@ -10,6 +10,7 @@ import uuid
 import numpy as np
 import warnings
 
+
 #Creates a basic cell from input parameters
 #
 # Input
@@ -23,7 +24,7 @@ import warnings
 #           "chromo_count" = the number of chromosomes in the sister chromatids
 #       }
 #    ]
-def create_basic_cell(params, ID, parent_ID = "na"):
+def create_basic_cell(params, ID, parent_ID = None, generation = None):
     sis_chroma_list = []
     for sister_chromo_info in params:
         chromo_length = sister_chromo_info['chromo_length']
@@ -33,7 +34,7 @@ def create_basic_cell(params, ID, parent_ID = "na"):
                                                              ave_gene_length,
                                                              chromo_count)
         sis_chroma_list.append(sis_chroma)
-    return(Cell(ID, sis_chroma_list, parent_ID))
+    return(Cell(ID, sis_chroma_list, parent_ID, generation))
 
 
 #This duplicates a cell exactly!  Makes new objects for everythign but they are
@@ -43,7 +44,9 @@ def create_basic_cell(params, ID, parent_ID = "na"):
 #
 # OUtput
 #   dup_cell = the new cell that is duplicated!
-def duplicate_cell(cel, ID):
+def duplicate_cell(cel, ID=None):
+    if not ID:
+        ID = uuid.uuid1()
     sis_chromo = [sister_chromosome_functions.duplicate_sister_chromatid(sis_chromo) for sis_chromo in cel.sister_chromatids]
     dup_cel = Cell(ID, sis_chromo, cel.id, generation = cel.generation + 1)
     return(dup_cel)
@@ -60,7 +63,7 @@ def duplicate_cell(cel, ID):
 def multiple_duplicates_with_UUID(parent_cel, number_of_duplicates):
     daughter_cells = []
     for i in range(number_of_duplicates):
-        daughter_cells.append(duplicate_cell(parent_cel, uuid.uuid1()))
+        daughter_cells.append(duplicate_cell(parent_cel))
     return(daughter_cells)
 
 
@@ -87,7 +90,7 @@ def point_mutate_cell_norm(cel, params):
             ran_gene = random.choice(ran_chromo.genes) # Gets a random gene from chromosome
             ran_bp = random.choice(ran_gene.sequence) #Gets a random BP to mutate
         except IndexError:
-            print(ran_chromo.length)
+            print(ran_chromo.length())
             raise Exception("Genes or Sequences have length of Zero.  This cannot be allowed to happen")
         ran_bp.bp = random.choice(dna_functions.bp_options()) #Replaces with a random BP
     return(cel)

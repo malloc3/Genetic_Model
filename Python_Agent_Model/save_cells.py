@@ -1,5 +1,6 @@
 import csv
 import os
+import pandas as pd
 
 
 
@@ -8,23 +9,69 @@ import os
 #TODO make this faster to write by using pandas??  I don't think the hold up in generation
 # Times is from writing though.  Actually certainly not.
 
-std_headers = ['Strain_ID', 'Parent_ID', 'Generation', "chromosome_number", "CC_Number", "Sequence_str"]
+std_headers = ['Strain_ID', 'Parent_ID', 'Generation', "number_of_chromatids", #Cell Info
+                "chromatid_number", "CC_Number", "chromatid_id", "chromatid_parent",    # Chromatid INfo
+               "chromosome_id", "chromosome_parent", "chromsome_recombinations", "chromosome_length", "chromo_num_genes",    # Chromosome INfo
+               "gene_id", "gene_parent", "gene_position", # GEne Info
+               "Sequence_str"] # GEne Sequence
 # This module is to handle saving the cells in a logical and helpful way
 #  Thie should probably save stuff to a CSV or similar.
 
 #This saves the current generation to a CSV designated in the FILE LOCATION
 #
-def write_generation(generation, writer):
+def write_generation(generation, file_name):
     all_data = []
     for cel in generation:
         all_data += get_cell_data_to_write(cel)
-    #[get_cell_data_to_write(cel) for cel in generation] #NEED TO REWRITE THIS
-    writer.writerows(all_data)
+    temp_df = pd.DataFrame(all_data, columns=std_headers)
+    temp_df.to_csv(file_name, mode='a', header=False, index=False)
 
 
-#Dictates what data is writen to the csv for all writer functions
-# TODO SHOULD MANAGE CHROSOME NUMBER A LITTLE BETTER PROBABLY
+# Pulls relevant data from the cell and reports it as a list of lists
 def get_cell_data_to_write(cel):
+    cell_info = []
+    # get the cell Information
+    strain_id = cel.id
+    parent_id = cel.parent
+    generation = cel.generation
+    number_of_chromatids = cel.number_chromatids()
+
+    # Now we gotta get chromatid information
+    for sis_chroma in cel.sister_chromatids:
+        chromatid_number = sis_chroma.chromatid_number
+        cc_number = sis_chroma.num_chromosomes
+        chromatid_id = sis_chroma.id
+        chromatid_parent = sis_chroma.parent
+
+        #Now lets get individual chromosome information
+        for chromo in sis_chroma.chromosomes:
+            chromosome_id = chromo.id
+            chromosome_parent = chromo.parent
+            chromosome_recombinations = chromo.recombination
+            chromosome_length = chromo.length
+            chromosome_num_genes = len(chromo.genes)
+
+            #Now lets get individual gene information
+            for ge in chromo.genes:
+                gene_id = ge.id
+                gene_parent = ge.parent
+                gene_position = ge.position
+                sequence_str = ge.sequence_str()
+                cell_info.append([strain_id, parent_id, generation, number_of_chromatids,
+                                  chromatid_number, cc_number, chromatid_id, chromatid_parent,
+                                  chromosome_id, chromosome_parent, chromosome_recombinations, chromosome_length, chromosome_num_genes,
+                                  gene_id, gene_parent, gene_position,
+                                  sequence_str])
+    return(cell_info)
+
+
+
+
+
+
+
+
+
     cell_chromosome_sequences = []
     sis_chroma_number = 0
     for sis_chroma in cel.sequence_str():
@@ -43,10 +90,12 @@ def write_generation_to_csv(generation, filename, metadata = None):
     if not os.path.exists(filename):
         write_new_file_with_metadata(filename, metadata)
 
+    # This part is modified temporarily to test a theory on how to speed up the writing process (05/10/24)
+    write_generation(generation, filename)
     #Writes actual files
-    with open(filename, 'a', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        write_generation(generation, writer)
+    #with open(filename, 'a', newline='') as csvfile:
+    #    writer = csv.writer(csvfile)
+    #    write_generation(generation, writer)
 
 # This opens an existig csv or creates and formates a new one
 # Then writes the cell information to the csv

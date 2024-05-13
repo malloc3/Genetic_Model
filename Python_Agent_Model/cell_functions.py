@@ -70,34 +70,6 @@ def multiple_duplicates_with_UUID(parent_cel, number_of_duplicates):
     return(daughter_cells)
 
 
-#TODO Create the function that manages recombination
-# This has no knowledge of how many chromosomes a chromatid has.
-#  It will chose chromatids at random.  #TODO THIS PROBABLY NEEDS TO BE DIFFERENT
-#
-# Input
-#   cels = List of all the cells in a generation
-#   params = Dictionary
-#   {
-#       recombination_probability: [3, .001] # The normal curve about mean that variation will happen
-#   }
-def recombinate_cells_norm(cels, params):
-    for cel in cels:
-        recombination_probability = params["recombination_probability"]
-
-        number_of_recombination_events = abs(round(np.random.normal(recombination_probability[0], recombination_probability[1])))
-        for i in range(number_of_recombination_events):
-            recombinate_random_chromatid(cel)
-
-
-# Randome recombines a two chromsomes in a random chromatid
-#
-# Input
-#   cel = cell class
-def recombinate_random_chromatid(cel):
-    random_sis_chroma = random.choice(cel.sister_chromatids)
-    sister_chromosome_functions.random_recombination(random_sis_chroma)
-
-
 # TODO
 #  Need to think on this.   I have the normal about zero.  Such that neg
 # numbers are equally as likely as positive numbers.  Negs are considered teh same
@@ -153,43 +125,6 @@ def ccnv_cels_norm(cels, params):
 
 
 
-# This creates point mutations in the Genome with some frequency determiend by the function and function params
-# The frequency is on a CELL basis with no BP or cell specific relative frequency of mutations.  The chromosomes
-# that have more copies are more likely to see a mutation due to the increased number of copies.  THis is linear.
-# Input:
-#   cels = List of Cels
-#   function = Function determining the frequence of point mutations in a specific cell
-#   function_params = List of params for the function above
-# Output
-#   None
-def randomly_distributed_point_mutate_cell(cel, function, function_params):
-    number_of_mutation = function(function_params) #This should give the number of mutations
-    for i in range(number_of_mutation):
-        try:
-            # Gets a random chromatid from the chromatids in the cell
-            ran_chroma = random.choice(cel.sister_chromatids)
-
-            # Gets a random chromosome from the chromatid
-            ran_chromo = random.choice(ran_chroma.chromosomes)
-            ran_gene = random.choice(ran_chromo.genes) # Gets a random gene from chromosome
-            ran_bp = random.choice(ran_gene.sequence) #Gets a random BP to mutate
-        except IndexError:
-            print(ran_chromo.length())
-            raise Exception("Genes or Sequences have length of Zero.  This cannot be allowed to happen")
-        ran_bp.bp = random.choice(dna_functions.bp_options()) #Replaces with a random BP
-    return(cel)
-
-
-# This will randomly mutate the cels in the list cels per the frequencey given by the function and function params
-#
-# Input:
-#   cels = List of Cels
-#   function = Function determining the frequence of point mutations in a specific cell
-#   function_params = List of params for the function above
-# OUtput
-#   None
-def randomly_distributed_point_mutate_cells(cels, function, function_params):
-    return([randomly_distributed_point_mutate_cell(cel, function, function_params) for cel in cels])
 
 
 
@@ -197,10 +132,7 @@ def randomly_distributed_point_mutate_cells(cels, function, function_params):
 
 
 
-
-
-
-
+# Everything Below this is depricated and should nto be used
 # ==================  Depricated ============================= #
 # Genomes should have higher mutation rates.
 #
@@ -236,3 +168,38 @@ def point_mutate_cell_norm(cel, params):
 # params[1] = standard deviation
 def point_mutate_cells_norm(cels, params):
     return([point_mutate_cell_norm(cel, params) for cel in cels])
+
+
+
+
+
+
+
+
+
+#TODO Create the function that manages recombination
+# This has no knowledge of how many chromosomes a chromatid has.
+#  It will chose chromatids at random.  #TODO THIS PROBABLY NEEDS TO BE DIFFERENT
+#
+# Input
+#   cels = List of all the cells in a generation
+#   params = Dictionary
+#   {
+#       recombination_probability: [3, .001] # The normal curve about mean that variation will happen
+#   }
+def recombinate_cells_norm(cels, params):
+    for cel in cels:
+        recombination_probability = params["recombination_probability"]
+
+        number_of_recombination_events = abs(round(np.random.normal(recombination_probability[0], recombination_probability[1])))
+        for i in range(number_of_recombination_events):
+            recombinate_random_chromatid(cel)
+
+
+# Randome recombines a two chromsomes in a random chromatid
+#
+# Input
+#   cel = cell class
+def recombinate_random_chromatid(cel):
+    random_sis_chroma = random.choice(cel.sister_chromatids)
+    sister_chromosome_functions.random_recombination(random_sis_chroma)

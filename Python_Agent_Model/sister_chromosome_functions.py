@@ -81,6 +81,18 @@ def duplicate_sister_chromatid(sis_chromo):
     return(dup_sister_chromo)
 
 
+
+
+
+
+
+
+
+
+# ========================= Depricated =================================#
+#recombination related functions have been moved to the recombination_functions file
+
+
 # Chooses two random chromosomes to randomly do a recombination event
 #
 # Input

@@ -106,6 +106,33 @@ def create_basic_gene(length, id = uuid.uuid1(), parent = None, position = None)
     return(gene(sequence, id, parent, position))
 
 
+# This swabs two genes between two chromosomes. And updates the genes to their new position idicies
+#
+# Chromo_1 = Class Chromosome 
+def swap_two_genes(chromo1, chromo2, gene_position_1, gene_position_2):
+    gene_1 = chromo1.genes[gene_position_1]
+    gene_2 = chromo2.genes[gene_position_2]
+    gene_1.position = gene_2.position
+    gene_2.position = gene_1.position
+
+    chromo1.genes[gene_position_1] = gene_2
+    chromo2.genes[gene_position_2] = gene_1
+
+# This replaces gene in chromo2 with genes in chromo1 between two chromosomes. And updates the genes to their new position idicies
+#
+# Chromo_1 = Class Chromosome 
+def replace_gene(chromo1, chromo2, gene_position_1, gene_position_2):
+    gene_1 = chromo1.genes[gene_position_1]
+    gene_2 = chromo1.genes[gene_position_2]
+    replacement_gene = duplicate_gene(gene_1)
+    replacement_gene.position = gene_2.position
+
+    chromo2.genes[gene_position_2] = replacement_gene
+
+
+
+
+# ================================================== Depricated ==================================================
 # Randomly recombinates a genes from these chromosomes
 #  Essentially choose a gene at random and then switches them!
 #
@@ -125,17 +152,3 @@ def random_recombination(chromo1, chromo2):
         #Updates teh chromosomes with the id of the chromosome it swaped with
         chromo1.add_recombination(chromo2.id)
         chromo2.add_recombination(chromo1.id)
-
-
-# This swabs two genes between two chromosomes. And updates the genes to their new position idicies
-#
-# Chromo_1 = Class Chromosome 
-def swap_two_genes(chromo1, chromo2, gene_position_1, gene_position_2):
-    gene_location = random.randint(0, len(chromo2.genes)-1)
-    gene_1 = chromo1.genes[gene_position_1]
-    gene_2 = chromo2.genes[gene_position_2]
-    gene_1.position = gene_2.position
-    gene_2.position = gene_1.position
-
-    chromo1.genes[gene_position_1] = gene_2
-    chromo2.genes[gene_position_2] = gene_1

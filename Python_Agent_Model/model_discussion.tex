@@ -1,0 +1,203 @@
+\documentclass{article}
+
+\usepackage{/Users/canonmallory/Documents/LATEX_Files/example-sentences/example-sentences}
+\usepackage{/Users/canonmallory/Documents/LATEX_Files/example-sentences/conversations}
+\usepackage{amsthm}
+
+\newtheorem{evo_impacts}{Notes on Evolutionary Impacts}
+\newtheorem{note}{Note}
+
+\title{A Theoretical Discussion of Chromosomal Copy Number Varation on Clocal Genetics}
+\author{Cannon Mallory}
+\date{May 14, 2024}
+
+\begin{document}
+    \maketitle
+
+    \section{Abstract}
+
+    In this document I would like to discuss the creation and evaluation of a genetics model that includes the effects of high chromosomal copy number variation (CCNV) on a clonal system.  Primarily I would like to explore how CCNV changes the rantes and patterns of LOH and allelic diversity.  Primarily I expect that high CCNV will lead to a relativly high general level of heterozygosity across the genome with large clumping of homologous regions.  I also expect that the population will at least have the typical clonal levels of allelic diversity if not moderatly more.
+
+    \section{Important Terms and Definitions}
+    \begin{itemize}
+        \item CCN: Chromosomal Copy Number.  The pure count of the number of copys of a specific chromosome (diploidy, triploidy, etc).  An organism with chromosomes that have different CCN has aneuploidy.
+            \begin{itemize}
+                \item CCN Fingerprint: The specific pattern of aneuploidy associated with a specific chromosome, cell, or population of cells
+            \end{itemize}
+        \item CCNV:  The biological phenomena of dynamic aneuploidy.  This variation may or may not be consistant between all chromosomes.
+            \begin{itemize}
+                \item CCNV Fingerprint: A specific pattern of change in chromosomal copy numbers of a specific chromosome, cell, or population of cells.
+                \item Positive CCNV: Either events or trends that lead to an increase in CCN.  This can occur at both the chromosomal level or genome level.
+                \item Negative CCNV: Either events or trends that lead to a decrease in CCN.  THis can occur at both the chromosomal level or genome level.
+        \end{itemize}
+        \item Gene Copy Number (GCN):  The count of the number of gene repeates.  This usually discussed in context of a specific chromosome, or general trends within a cell or population.
+        \item Recombination: The biological phenomena of two homologous chromosomes exchanging genetic information.
+            \begin{itemize}
+                \item Reciprical Recombination: Recombination where genetic information is swaped between homologous chromosomes.
+                \item Non-Reciprical Recombination: Recombination where the genetic information is shared in one direction between homologous chromosome (from the Donor to the Receptor chromosome).
+                    \begin{itemize}
+                        \item Donor Chromosome: The chromosome that donates genetic information.  Note: This chromosome remains unaltered
+                        \item Receptor Chromosome: The chromosome that recieves genetic information. Note: This chromosome is altered
+                    \end{itemize}
+                \item Gene-Conversion: A type of recombination where a single gene or group of genes not including the end of the chromosome undergoes recombination.  Note: This requires two double strand breaks in the chromosomes.
+                \item Tail Swap: A type of recombination where a gene or group of genes including one tail of the chromosomes undergoes recombination.  Note: This requires a single double strand break.
+            \end{itemize}
+        \item Linkage Disequalibrium: The biological phenomena that the physical relationship between genes influences the rate at wich genes will undergo recombination together.  (Generally: physcially close genes are more likely to undergo recombination together) Note: There are many complex factors that can incluence rates of likage disequalibrium.
+        \item Loss of Heterozygosity (LOG):  The act or rate of losing heterozygous allels within the genome.  Note: This is often driven by Non-Reciprical Recombination events or loss of chromosomes.
+        \item Allelic Diversity: The population level diversity of allels.  This can be applied to individual genes, trends of homologous chromosomes, or trends of the entire genome.
+        \item Homing Endonuclease (HEG): A somewhat rare but important drive of recombination.  Typically observed as non-reciprical gene conversion.  HEG sites generally are found in self-splicing genetic elements like group I introns and inteions.  HEG sites encode for highly targeted endonucleases that cleave receptor chromosomes and insert their own coding regions.  This process is highly effecient and often carries genes near the HEG site to the receptor chromosome.  This can either replace existing genes or increase in Gene Copy Number in the recptor chromosome.
+        \item Homoplasy: A cell with multiple nuclei that contain genetically different information.
+        \item Hybridization: The genetic phenomena of two cells or organisms sharing DNA to create a genetlicly hybrid offspring.
+        \item Vegitative Compatability: Cell states that allow vegitative hybridization between cells.
+        \item Vegitative Hybridization: THe specific method of hybridization where two cells merge through some mechanism and share DNA through non meiotic methods.  Note: This is a relativly common mehtod of hybridization in single celled organisms, especially organisms that are undergo only "rare hybridization events"
+        \item Point Mutations: The event where a single nucleotide is mutated to a different nucleotide.  This is usually non-consequential or detrimental to the fitness of a cell.  Rarely it will be beneficial.
+        \item Single-nucleotide polymorphism: The result of a point mutation.  Usually used when compairing two or more cells
+    \end{itemize}
+
+
+    \section{Intro}
+    
+    Chromosomal Copy Number Variation (CCNV) is a relativly rare but important biological phenomena.  Most often observed in fungi, even moderate levels of CCNV could have significant evolutionary, genetic stability, and regulatory effects.  These effects may be most pronounced in the amphibian fungal pathogen \textit{Bd} which experiences rapid changes in chromosomean copy numbers likely due to environtal variation or other stressors.  This fungus exibits interesting patterns of heterozygosity possibly due to high levels of CCNV.  Spcifically \textit{bd} has a high overal level of heterozigosity with large regions of homozygozity a pattern not often observed in either purly clonal or rarely hybridized systems.  This is further complicated by the clonal like, high levels of allelic diversity between strains of \textit{bd}.  It has been suggested that thess patterns are due to some rare-hybridization events which is duley possible.  Clear genetic signatures of hybridization has been observed in \textit{bd} [CITE] however no known mode of hybridization has been identified nor any direct hybridization event observed in the lab.  Although CCNV mechanistically cannot replicate all signatures of hybridization, these authors would like to suggest that moderate to high levels of CCNV can create hybridization adjacent patterns of heterozigosity explaining some of the genetic signatures of hybridization in \textit{Bd}.  CCNV is an important and understudied phenomena in clonal systems and its effects cannot be disregarded when examining the evolutionary history or evaluating the genetic stability of an organism.
+
+    In this paper the authors will attempt to create a clonal model of replication that includes variable rates of CCNV.  This model will not allow hybridization such that CCNV effects can be isolated from any possible hybridization effects.  The authors do note that the methods of modeling recombination could significantly alter results, thus great consideration must be employed.
+
+    \subsection{Metrics of Genetic Divesrity}
+    Population diversity is often eiter measured as the total number of point mutations (single nucleotid polymorphisms (SNPs)) or as the allelic diversity.  Allelic diversity is the measure of the number of different allels of a specific gene in a population. Silent mutations theoretically should not contribute to a measure of allelic diversity, howoever it is difficult to identify all silent mutations from purely genetic data so common allelic diversity measurement primarly analyize SNP frequency within known coding regions.  In our system we will measure the simple number of point mutations (or SNPs) in chromosome, cell, or population as one metric of population diversity see eqn \ref{POPULATION_SNPS_MEASURMENT}.  (NOTE REMEMBER THAT WE HAVE TO ACCOUNT FOR POPULATION SIZE N.  SOME SUBPOPULATION M < N MAY HAVE THE SAME SNPS DIFFERENT THAN L < N AND D < N.  THIS CAN HAPPEN ACROSS MANY DIFFERENT MUTAITONS.)
+
+    Heterozygosity is another common metric of population diversity.  Heterozygosity is a measure of the number regions of homologous chromosomes that are different (homozygosity is the inverse of heterozygosity).  This can be reported about a specific chromosome, across the all chromosomes in an individual or across an entire population.  The determination of when homologous chromosomes are heterozygous can have some variation, however most often this is some measure of the number of SNPs between the chromosomes.  Determining the heterozygosity when more than two homologous chromosomes are present can be challenging, however often the weighted average of dissimilar SNPs is used (FIGURE THIS OUT BETTER).  We will use the BLA BLA BLA equation (eqn. (eqn. \ref{generalized_chromosomes_heterozygosity_eqn})) for our measurement of chromosomal heterozygosity.  It is also common, to refere to a cell's overall heterozygosity which is a general metric of heterozygosity among all of the cells chromosomes.  We will use BLA BLA BAL equation (eqn. \ref{generalized_cell_heterozygosity_equn}) to calculate cellular heterozygosity.  Heterozygosity of ividiual chromosomes or cells and is often reported as the distribution of heterozygosity across the population (eqn. \ref{population_heterozygosity_eqn}).  When discussing multiple generations Loss of Heterozygosity (LOH) is often used as a rate of decrease in the distribution of heterozygosity of the population through time (Note: a negative LOH indicates an increase of heterozygosity). We will use eqn. \ref{LOH_eqn} to calculate the Loss of Heterozygosity.
+
+    \subsection{Qualitative Discussion}
+
+    The impacts of Chromosomal Copy Number Variation is highly dependent on the rate and type of CCNV, recombination, Single Nucleotide Point Mutations and the evolutionary pressures of the system.  Each of these components interact and change the rates and types of the other compoonents, these effects are quickly componded generation to generation making understanding and predicing this system extremely difficult.  Predicting or modeling evolutionary pressure specifically is extremely difficult and, frankly, is many lifetimes of study alone.  Because of the difficulty of including even a simplified evolutionary pressure we have chosen to remove it from the system all together.  Admittedly could significantly change the end results, however, we will periodically discuss the qualitative effects of evolutioanry pressure on systems and the trends that we expect to change the most under a selective pressure.  To begin understanding this system we must first examin each of these existing component alone:
+
+
+
+    % ========================================================= POINT MUTATION ========================================================== %
+    \subsubsection{Point Mutations}
+    A point mutation is when any event causes a single basepair change it's identity (e.g. a to t).  There can be drastically different effects of a point mutation depending on the location and specific change of the basepair.  A point mutation can effect local or global DNA stability, recombination frequency, gene expression, protein sequence, replication effeciency, mutation rates, or countless other esoteric impacts (CITE).  Cells, also have several mechanisms to identify and repair point mutations, especially in important regions further complicating the net effect of any one point mutation.
+    
+    Practially, however most point mutation will have either essentially no effect  or will change the expression or identity a protein or small molecule to some unknown degree (include a small molecule b/c bits of RNA does stuff).  Because of the reletivly large size of non-coding regions, DNA repair mechanisms, and other mechanisms designed to limit the effects of mutations, many point mutations land in the no effect catagory.  If, perchance a a point mutation does have an effect it is usually negative to overall cell fitness and is often lossed from the population.
+    
+    This broad and often ambiguous impact of any one point mutation is a primary reason for us to not include evolutionary pressure. In the abscense of evolutionary pressure we expect all point mutations to be maintained in the population.  This will artificially increase the number of point mutations and measured heterozygosity in the simulated popoulation.  The impact of no evolutionary pressure on rates of point mutations and measured heterozygosity is discussed at length in later sections.
+
+    Point mutations can occur for many reasons, however they are generally caused by a DNA polymerase substituting the wrong basepair during DNA replication.  There is some underlying rate of point mutations caused either directly or indirectly by DNA damage, foreing proteins, or other processes but these are comparatibly rare.  For cells that have a fast turnover the probaility of a point mutation due to some factor other than replication error trends to zero.  Because point mutations are predomenently caused by erronous substitutions during DNA replication the lifetime probablity of any one point mutation can reasonable be approximated by a linear function (\(P_{life}\)) of he number of replicattion (\(r\)) an individual cell will experience and the instantanious point mutation probability (\(P_m\)) at the time (\(t\)) of replication (eqn. \ref{general_lifttime_probability}).
+
+    \begin{equation}
+        P_{life}(r, t) = r * P_m(t) \label{general_lifttime_probability}
+    \end{equation}
+
+    In reality the probability of a point mutation to occur is is not evenly distributed across the genome, with deviations depending on the identity of the base pair, poisiton of a base pair on the chromosome, the local DNA sequence, possible DNA modifications, the length of the chromosome and countless other esoteric factors.  These local deviations are arguably small compaired to the net mutation rate across the entire genome.  Because of this we will make the important assumption that the point mutation probability is equal across the genome.
+
+    The instantanious point mutation probability (\(P_m(r)\)), however, is highly dependent on the inherent error rate of cellular processes (\(M_i\)), some function (\(f_1\)) of the instantanious environmental factors (\(E_f(t)\)), and the instantanious stress of the cell (\(S(t)\)) (see eqn. \ref{point_mutation_probability}).
+    
+    \begin{equation}
+        P_m(t) = M_i + f_1(E_f(t), r) + S(t) \label{point_mutation_probability}
+    \end{equation}
+
+    where
+
+    \begin{equation}
+        M_i = Constant
+    \end{equation}
+
+    \begin{equation}
+        E_f(t) = Instantanious\ Environmental\ Factors    
+    \end{equation}
+    
+
+    \begin{equation}
+        f_1(E_f(t)) = Some\ function\
+    \end{equation}
+    
+    \begin{equation}
+        S(t) = Instantanious\ Stress\ of\ the\ Cell
+    \end{equation}
+
+
+    The instantanious stress of the cell is closely related to local environmental factors such that \(S(t)\) can be written as:
+
+    \begin{equation}
+        S(t) = f_2(E_f(t))
+    \end{equation}
+
+    If we let \(f(E_f(t)) = f_1(E_f(t)) + f_2(E_f(t))\) and accept that, although environmental factors in nature are generally not constant, the variation (\(V\)) of \(f(E_f(t))\) within common environmental ranges (\(E_f\)) is close to zero (\(V(f(E_f(t)) \approx 0)\)) we can reasionably approximate \(f(E_f(t)) \approx C_{Ef} \) where \(C_{Ef}\) is some constant. Letting us further simplify eqn. \ref{point_mutation_probability} as:
+    
+
+    \begin{equation}
+        P_m(t) = M_i + C_{Ef} = M_c
+    \end{equation}
+
+    where
+
+    \begin{equation}
+        M_c = The\ Mutation\ Constant
+    \end{equation}
+
+
+
+
+    This approximation is extremely helpful since we can rewrite the liftime probability of any one point mutation as a function of only \(r\) (eqn. \ref{general_lifttime_probability_v2}) :
+
+    \begin{equation}
+        P_{life}(r) = r * M_c \label{general_lifttime_probability_v2}
+    \end{equation}
+
+    If we assume that none of the daughter cells that are created during mitosis are the parent cell speicifcally, the number of replication events (\(r\)) a cell experiences is 1 allowing us to further simplify the lifetime point mutation probability function to eqn. \ref{constant_general_lifttime_probability}.
+
+    \begin{equation}
+        P_{life} = M_c \label{constant_general_lifttime_probability}
+    \end{equation}
+
+    \begin{note}
+        Because the point mutation probability is constant we can easily represent the total mutation rate of any specific cell as a function of the point mutation probability and the size of the genome.  Taking this step is common however we refrain simply because the form shown in eqn. \ref{constant_general_lifttime_probability} worked best with our model design.  Conviniently this allows for future modification of the point mutation probability if the assumptions above are not met.
+    \end{note}
+
+    \begin{evo_impacts}
+        As discussed in the intro of this section, evolutionary pressure would decrease the number of point mutations mantained in the populations.  How much this would decrease is highly variable and unknown, subject to the specific cell type and conditions applied.  Maintaining these point mutations directly increases the rates of heterozygosity and important implication.  If the rates of mutation are high, total heterozygosity will be diven by the mutation rate and the effects of other mechanisms may have little to no effect.  This is  is discussed at length in later sections.
+    \end{evo_impacts}
+
+
+
+    % ========================================================= Recombination ========================================================== %
+    \subsubsection{Recombination}
+    Recombination is a general term for when two usually homologous chromosomes exchange DNA through some process.   Although this theoretically can occur between non homologous chromosome these events are extremely rare and would almost always have a severe impact on fitness likely causing immediate cell death.  As such we will not consider non-homologous chromosomal recombination events.  Recombination plays an important but disprite effect in cell poulations depending on the rates of hybridization.  
+    
+    In purly hybridizing cells, recombination allows for the reorganization of parent chromosomes leading to offspring with more unique allelic distribution than is possible without recombination (fig. \ref{recombination_effects_image} A). The exact LOH observed in purly hybridizing cells is dependent on the rates and specific mechanisms of recombination, hybridization, and point mutations; however, hybridizing cells do generally have a low LOH compaired to clonal or rarely hybridizing cells.  It is important to note that although recombination during hybridization helps maintain lower rates of population LOH, a single recombination event may result in a decrease in individual heterozygosity.  Although the mechanisms of recombination is similar in clonal cells, since no new allels are added, any recombination events will either maintain individual heterozygosity or cause an immediate loss of heterozygosity (fig. \ref{recombination_effects_image} B).  Because of this unbalanced change in heterozygosity, clonal systems generally see a LOH related to the frequency of recombination events and the rate of point mutations.  Many cells undergo both hybridization and clonal reproduction blending the trends of both.  The total change in population heterozygosity is highly dependent on the relative frequency of hybridization and clonal reproduction and rate of recombination events.  A high rate clonal reproduciton and the relatively high LOH impact of clonal recombination events generally leads to a net population LOH in many mixed reproducive systems (CITE ALL OF THIS).
+
+        TODO:MAKE RECOMBINATION EFFECTS FIGURE
+    
+    Broadly recombination can be broken into two catagories, reciprical recombination and non-reciprical recombination.  In reciprical recombination the genes in two homologous chromosomes do a complete swap leading to no loss of heterozygosity (fig. \ref{recombination_mechanisms} A,C).  This process can still have singificant immediate regulatory implication and may have some longterm heterozygosity and allelic diversity implications in clonal organims.  In non-reciprical recombination, one chromosome donates a copy of some region of genes to a homologous chromosome, essentially overwiting all existing genes in the recipiant chromosome (fig. \ref{recombination_mechanisms} B).  If the two homologous chromosomes were not perfectly homozygous over the recombined region, a non-reciprical recombination event will lead to an immediate loss of heterozygosity and decrease in allelic diversity (fig. \ref{recombination_mechanisms} D).  
+
+        TODO: MAKE FIGURE OF RECIPRICAL AND NON RECIPRICAL RECOMBINATION
+
+    Because of the asymetric nature of reciprical and non-reciprical recombination clonal organisms generally see a stead loss of heterozygosity.
+    
+    Importantly the rate non-reciprical recombination combined with the Point Mutation Probability directly causes the high allelic diversity obersved in clonal systems in the presecens of evolutionary pressure.  This is because homozygous genes cannot be self selelcted for within the genome even if there are slight decreases in evolutionary fitness.  The cell mwill maintain even bad allels when they are homozygous.  This rate of allelic diversity will not be as high as in the absense of evolution however it will generally be higher than in hybridization regihmes. (Non clonal organisms, in teh abscense of evolutionary pressure will see the same rate of allelic diversity as clonal organims in the abscense of evolutionary pressure because bad allels are not being weeded out in either case.)
+
+    \begin{evo_impacts}
+        When taken together point mutations and recombination have an interesting impact on SNPs in the presense of evolutionary pressure.  Without evolutionary pressure all SNPs are mostly maintained regardless of either hybridizing or clonal recombination events.  A SNP is only lossed through the moderaly rare non-reciprical recombination event.  In the prescense of evolutionary pressure frequently hybridizing cells will generally have fewer SNPs than clonal cells.  This is because each generation recieves a novel set of genes that may not contain a slightly deleterious SNP from one of the parent generations.  This mixing puts more evolutionary pressure on any slightly deletarious versions eliminating them from the population.  In contrast when clonal organism gets a SNP it is mantained in the genome since no new genetic information is added. Eventually when enough non-reciprical recombination events occurs this slightly deletarious SNP will become homozygous in some subset of offspring.  As long as this SNP is either silent or only slighly deviant both the origial and the SNP allel will be maintained in the population.  It is essential that this SNP is either silent or has only slight changes in cellular fitness otherwise the cells with the most beneficial allel will quickly outcompete the less fit cells.  Ultimatly this leads to the commonly observed trend that clonal cells have higher allelic diversity than frequently hybridizing cells.   This effect of recombination will not be observed without evolutionary pressure.  This pattern does rely on the assumption that the rates of non-reciprical recombination are the same in both the hybridizing and clonal systems.
+
+        The change in heterozygosity due to recombination will likely be different in a system that is subjct to evolutionary pressure.  Cellular systems are almost never driven by a single allel.  Instead the net combination of multiple allels sometimes across many chromsoomeses drives cellular systems.  Meaning that any recombination event can have a complex change in cellualar fitness.  In the presense of evolutionary pressure any less favorable combinations of genes created through some recombination event will be down selected changing the net heterozygosity.
+    \end{evo_impacts}
+
+    \subsubsection{Evolutionary Effects of CCNV}
+
+    \begin{examples}
+        \item\label{SIMPLE_CCNV_RECOMB_POINT_MUTATION_INTERACTION} Lets examine how a small change in chromosome copy number can alter the overal recombination \begin{examples}
+            \item Let some chromosome A have some copy number N
+            \item Let 
+        \end{examples}
+    \end{examples}
+
+
+
+    The evolutionary impacts of CCNV in highly dependent on the rate and type of CCNV, recombination, and point mutations.  Each of these 
+    To understand the evolutionary efects of Chromosomal Copy Number Variation we must first establish the generak evolutionary impacts of Chromosomal Copy Number.
+
+    
+    \subsubsection{Genetic Stability Effects of CCNV}
+
+
+    
+
+\end{document}

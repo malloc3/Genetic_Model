@@ -3,7 +3,7 @@
 
 import numpy as np
 import random
-
+import dna_functions
 
 
 #This function returns a number rounded to the closest integer about some mean and standard deviation
